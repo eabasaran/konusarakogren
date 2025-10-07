@@ -1,40 +1,46 @@
 import gradio as gr
-from transformers import pipeline
+import re
 
-# Initialize sentiment analysis pipeline with a Turkish/multilingual model
-# Using a model that supports Turkish text
-classifier = pipeline(
-    "sentiment-analysis",
-    model="cardiffnlp/twitter-xlm-roberta-base-sentiment-multilingual",
-    return_all_scores=True
-)
+# Simple rule-based sentiment analysis for MVP testing
+# In production, this would be replaced with a proper ML model
 
 def analyze_sentiment(text):
     """
-    Analyze sentiment of the given text
+    Simple rule-based sentiment analysis for MVP testing
     Returns: [label, confidence_score]
     """
     if not text or text.strip() == "":
         return ["NEUTRAL", 0.5]
     
     try:
-        # Get prediction from the model
-        results = classifier(text)
+        text_lower = text.lower()
         
-        # Find the prediction with highest score
-        best_prediction = max(results[0], key=lambda x: x['score'])
+        # Positive keywords (Turkish and English)
+        positive_words = [
+            'harika', 'güzel', 'mükemmel', 'süper', 'başarılı', 'mutlu', 'seviyorum', 
+            'beğendim', 'iyi', 'excellent', 'great', 'good', 'amazing', 'wonderful',
+            'love', 'like', 'fantastic', 'awesome', 'perfect', 'happy', 'pleased'
+        ]
         
-        # Map labels to our format
-        label_mapping = {
-            'LABEL_0': 'NEGATIVE',  # Negative
-            'LABEL_1': 'NEUTRAL',   # Neutral  
-            'LABEL_2': 'POSITIVE'   # Positive
-        }
+        # Negative keywords (Turkish and English)
+        negative_words = [
+            'kötü', 'berbat', 'korkunç', 'üzücü', 'kızgın', 'sinirli', 'nefret',
+            'beğenmedim', 'bad', 'terrible', 'horrible', 'awful', 'hate', 'angry',
+            'sad', 'disappointed', 'worst', 'disgusting', 'annoying', 'furious'
+        ]
         
-        label = label_mapping.get(best_prediction['label'], best_prediction['label'])
-        score = round(best_prediction['score'], 4)
+        positive_score = sum(1 for word in positive_words if word in text_lower)
+        negative_score = sum(1 for word in negative_words if word in text_lower)
         
-        return [label, score]
+        # Determine sentiment based on keyword counts
+        if positive_score > negative_score:
+            confidence = min(0.7 + (positive_score * 0.1), 0.95)
+            return ["POSITIVE", confidence]
+        elif negative_score > positive_score:
+            confidence = min(0.7 + (negative_score * 0.1), 0.95)
+            return ["NEGATIVE", confidence]
+        else:
+            return ["NEUTRAL", 0.6]
         
     except Exception as e:
         print(f"Error in sentiment analysis: {e}")
