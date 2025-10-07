@@ -6,7 +6,6 @@ sys.path.insert(0, '.')
 
 from app import analyze_sentiment
 
-# Test cases
 test_cases = [
     ("Bu harika bir gün! Çok mutluyum!", "POSITIVE"),
     ("Bu ürün berbat, hiç beğenmedim.", "NEGATIVE"),

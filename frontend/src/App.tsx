@@ -18,7 +18,6 @@ function App() {
   const [content, setContent] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // Mesajları yükle
   const loadMessages = async () => {
     try {
       const response = await fetch(`${API_BASE}/messages`);
@@ -29,7 +28,6 @@ function App() {
     }
   };
 
-  // Yeni mesaj gönder
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!nickname.trim() || !content.trim()) return;
@@ -46,7 +44,7 @@ function App() {
 
       if (response.ok) {
         setContent('');
-        loadMessages(); // Mesajları yenile
+        loadMessages();
       }
     } catch (error) {
       console.error('Mesaj gönderilemedi:', error);
@@ -55,12 +53,10 @@ function App() {
     }
   };
 
-  // Sayfa yüklendiğinde mesajları getir
   useEffect(() => {
     loadMessages();
   }, []);
 
-  // Duygu analizi renklerini belirle
   const getSentimentColor = (label?: string) => {
     switch (label?.toLowerCase()) {
       case 'positive':

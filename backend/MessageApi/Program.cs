@@ -6,14 +6,12 @@ using MessageApi.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container
 builder.Services.AddDbContext<MessageContext>(opt =>
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=messages.db"));
 builder.Services.AddScoped<MessageRepository>();
 builder.Services.AddHttpClient();
 builder.Services.AddControllers();
 
-// Add CORS for frontend integration
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -26,17 +24,14 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Ensure DB created
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<MessageContext>();
     db.Database.EnsureCreated();
 }
 
-// Configure the HTTP request pipeline
 app.UseCors("AllowAll");
 
-// Message endpoints
 app.MapPost("/messages", async (MessageDto dto, MessageRepository repo, IHttpClientFactory http, IConfiguration config) =>
 {
     var m = new Message { Nickname = dto.Nickname, Content = dto.Content, SentAt = DateTime.UtcNow };
@@ -48,7 +43,6 @@ app.MapPost("/messages", async (MessageDto dto, MessageRepository repo, IHttpCli
         try
         {
             var client = http.CreateClient();
-            // Gradio/Spaces expects { "data": [ <inputs...> ] }
             var payload = new { data = new[] { m.Content } };
             var resp = await client.PostAsJsonAsync($"{aiUrl.TrimEnd('/')}/api/predict", payload);
             if (resp.IsSuccessStatusCode)
@@ -59,7 +53,6 @@ app.MapPost("/messages", async (MessageDto dto, MessageRepository repo, IHttpCli
                 {
                     string? label = null;
                     double? score = null;
-                    // Gradio often returns a simple array like ["LABEL", 0.95]
                     if (dataElem.GetArrayLength() > 0)
                     {
                         var first = dataElem[0];
@@ -67,7 +60,6 @@ app.MapPost("/messages", async (MessageDto dto, MessageRepository repo, IHttpCli
                             label = first.GetString();
                         else if (first.ValueKind == JsonValueKind.Object)
                         {
-                            // sometimes HF returns an object with label/score
                             if (first.TryGetProperty("label", out var lab) && lab.ValueKind == JsonValueKind.String)
                                 label = lab.GetString();
                             if (first.TryGetProperty("score", out var sc) && sc.ValueKind == JsonValueKind.Number)
@@ -88,7 +80,6 @@ app.MapPost("/messages", async (MessageDto dto, MessageRepository repo, IHttpCli
         }
         catch (Exception ex)
         {
-            // MVP: log errors to console for debugging; in prod use proper logging
             Console.WriteLine($"AI call failed: {ex.Message}");
         }
     }

@@ -19,7 +19,7 @@ interface Message {
   sentimentScore?: number;
 }
 
-const API_BASE = 'http://localhost:5087'; // Production'da değiştirilecek
+const API_BASE = 'http://localhost:5087';
 
 export default function ChatScreen() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -27,7 +27,6 @@ export default function ChatScreen() {
   const [content, setContent] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // Mesajları yükle
   const loadMessages = async () => {
     try {
       const response = await fetch(`${API_BASE}/messages`);
@@ -39,7 +38,6 @@ export default function ChatScreen() {
     }
   };
 
-  // Yeni mesaj gönder
   const sendMessage = async () => {
     if (!nickname.trim() || !content.trim()) {
       Alert.alert('Uyarı', 'Lütfen kullanıcı adı ve mesaj girin');
@@ -73,12 +71,10 @@ export default function ChatScreen() {
     }
   };
 
-  // Sayfa yüklendiğinde mesajları getir
   useEffect(() => {
     loadMessages();
   }, []);
 
-  // Duygu analizi rengini belirle
   const getSentimentColor = (label?: string) => {
     switch (label?.toLowerCase()) {
       case 'positive':

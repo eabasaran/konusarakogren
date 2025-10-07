@@ -1,9 +1,6 @@
 import gradio as gr
 import re
 
-# Simple rule-based sentiment analysis for MVP testing
-# In production, this would be replaced with a proper ML model
-
 def analyze_sentiment(text):
     """
     Enhanced rule-based sentiment analysis with better scoring
@@ -15,83 +12,67 @@ def analyze_sentiment(text):
     try:
         text_lower = text.lower()
         
-        # Positive keywords with weights (Turkish and English)
         positive_words = {
-            # High intensity
             'harika': 2, 'mükemmel': 2, 'muhteşem': 2, 'excellent': 2, 'amazing': 2, 
             'wonderful': 2, 'fantastic': 2, 'awesome': 2, 'brilliant': 2, 'outstanding': 2,
             'seviyorum': 2, 'love': 2, 'adore': 2,
             
-            # Medium intensity
             'güzel': 1.5, 'iyi': 1.5, 'başarılı': 1.5, 'süper': 1.5, 'mutlu': 1.5,
             'good': 1.5, 'great': 1.5, 'nice': 1.5, 'happy': 1.5, 'pleased': 1.5,
             'beğendim': 1.5, 'like': 1.5, 'enjoy': 1.5, 'perfect': 1.5,
             
-            # Lower intensity - but still positive
             'fena değil': 0.8, 'idare eder': 0.8, 'okay': 0.8, 'fine': 0.8, 'alright': 0.8,
             'teşekkür': 0.8, 'thanks': 0.8, 'hoş': 0.8, 'tatlı': 0.8
         }
         
-        # Negative keywords with weights (Turkish and English)
         negative_words = {
-            # High intensity
             'berbat': 2, 'korkunç': 2, 'iğrenç': 2, 'rezalet': 2, 'nefret': 2,
             'terrible': 2, 'horrible': 2, 'awful': 2, 'disgusting': 2, 'hate': 2,
             'worst': 2, 'pathetic': 2, 'atrocious': 2,
             
-            # Medium intensity
             'kötü': 1.5, 'berbat': 1.5, 'üzücü': 1.5, 'sinirli': 1.5, 'kızgın': 1.5,
             'bad': 1.5, 'sad': 1.5, 'angry': 1.5, 'disappointed': 1.5, 'annoying': 1.5,
             'beğenmedim': 1.5, 'dislike': 1.5, 'furious': 1.5,
             
-            # Lower intensity
             'eh': 1, 'sönük': 1, 'sıkıcı': 1, 'boring': 1, 'meh': 1, 'blah': 1
         }
         
-        # Intensifiers and negations
         intensifiers = ['çok', 'very', 'really', 'extremely', 'so', 'too', 'quite', 'incredibly']
         negations = ['değil', 'yok', 'not', 'no', 'never', 'neither', 'nor', 'hiç']
         
-        # Calculate weighted scores
         positive_score = 0
         negative_score = 0
         
         words = text_lower.split()
         for i, word in enumerate(words):
-            # Check for intensifiers before the word
             multiplier = 1.3 if i > 0 and words[i-1] in intensifiers else 1.0
             
-            # Check for negations before the word (flip sentiment)
             negated = i > 0 and words[i-1] in negations
             
             if word in positive_words:
                 score = positive_words[word] * multiplier
                 if negated:
-                    negative_score += score  # Flip to negative
+                    negative_score += score
                 else:
                     positive_score += score
                     
             elif word in negative_words:
                 score = negative_words[word] * multiplier
                 if negated:
-                    positive_score += score  # Flip to positive
+                    positive_score += score
                 else:
                     negative_score += score
         
-        # Also check for multi-word phrases
         if 'hiç beğenmedim' in text_lower or 'hiç iyi değil' in text_lower:
             negative_score += 2
         if 'çok güzel' in text_lower or 'çok iyi' in text_lower:
             positive_score += 2
             
-        # Determine sentiment based on weighted scores
         total_score = positive_score + negative_score
         
         if total_score == 0:
-            # No sentiment keywords found
             return ["NEUTRAL", 0.55]
         
-        # Calculate confidence based on score difference
         if positive_score > negative_score:
             diff = positive_score - negative_score
             confidence = min(0.65 + (diff * 0.08), 0.98)
@@ -101,14 +82,12 @@ def analyze_sentiment(text):
             confidence = min(0.65 + (diff * 0.08), 0.98)
             return ["NEGATIVE", round(confidence, 2)]
         else:
-            # Scores are equal - mixed sentiment
             return ["NEUTRAL", 0.60]
         
     except Exception as e:
         print(f"Error in sentiment analysis: {e}")
         return ["NEUTRAL", 0.5]
 
-# Create Gradio interface
 iface = gr.Interface(
     fn=analyze_sentiment,
     inputs=gr.Textbox(

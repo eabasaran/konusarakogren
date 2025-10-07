@@ -34,7 +34,6 @@ const ChatScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingMessages, setIsLoadingMessages] = useState(true);
 
-  // AsyncStorage'dan kullanıcı adını yükle
   useEffect(() => {
     loadStoredNickname();
     loadMessages();
@@ -59,7 +58,6 @@ const ChatScreen = () => {
     }
   };
 
-  // Mesajları yükle
   const loadMessages = async () => {
     try {
       setIsLoadingMessages(true);
@@ -86,7 +84,6 @@ const ChatScreen = () => {
     }
   };
 
-  // Yeni mesaj gönder
   const sendMessage = async () => {
     if (!nickname.trim()) {
       Alert.alert('Uyarı', 'Lütfen kullanıcı adınızı girin');
@@ -101,7 +98,6 @@ const ChatScreen = () => {
     setIsLoading(true);
     
     try {
-      // Kullanıcı adını kaydet
       await saveNickname(nickname.trim());
       
       const response = await fetch(`${API_BASE}/messages`, {
@@ -120,7 +116,6 @@ const ChatScreen = () => {
       }
 
       setContent('');
-      // Mesajları yenile
       await loadMessages();
       
     } catch (error) {
@@ -138,7 +133,6 @@ const ChatScreen = () => {
     }
   };
 
-  // Duygu analizi rengini belirle
   const getSentimentColor = (label?: string): string => {
     switch (label?.toLowerCase()) {
       case 'positive':
