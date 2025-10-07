@@ -95,20 +95,21 @@ AI servisi `cardiffnlp/twitter-xlm-roberta-base-sentiment-multilingual` modelini
 
 ## 🔗 Demo Linkleri
 
-- **Web Chat**: [Vercel'de deploy edilecek]
-- **API Documentation**: [Render'da deploy edilecek]
-- **AI Endpoint**: [Hugging Face Space URL'i]
-- **Mobile APK**: [Build sonrası sağlanacak]
+- **Web Chat**: https://konusarakogren.vercel.app (Vercel deployment)
+- **API Backend**: https://konusarakogren-api.onrender.com (Render deployment)
+- **AI Duygu Analizi**: http://127.0.0.1:7860 (Local Gradio)
+- **GitHub Repository**: https://github.com/eabasaran/konusarakogren
 
 ## 📋 Özellikler (MVP)
 
 - [x] Mesaj gönderme ve listeleme API'si
 - [x] SQLite veritabanı entegrasyonu
 - [x] Duygu analizi AI servisi
-- [ ] React web chat arayüzü
-- [ ] React Native mobil uygulama
-- [ ] Gerçek zamanlı güncellemeler
-- [ ] Deployment ve hosting
+- [x] React web chat arayüzü
+- [x] React Native mobil uygulama kodu
+- [x] API + AI servisi entegrasyonu
+- [ ] Production deployment (Vercel + Render)
+- [ ] Gerçek zamanlı güncellemeler (WebSocket)
 
 ## 🏗️ Geliştirme Planı
 
@@ -117,15 +118,17 @@ AI servisi `cardiffnlp/twitter-xlm-roberta-base-sentiment-multilingual` modelini
 - Hugging Face duygu analizi API'si hazırlama
 - .NET backend ile mesaj kayıt API'si kurma
 
-### 2. Gün (Planlanmış)
+### 2. Gün (Tamamlandı ✅)
 - React web frontend geliştirme
-- API entegrasyonu
-- Vercel deployment
+- Backend + AI API entegrasyonu
+- React Native mobil kod hazırlığı
+- Vercel deployment dosyaları
 
 ### 3. Gün (Planlanmış)
-- React Native mobil uygulama
-- Final testler ve deployment
-- APK build
+- Production deployment (Vercel + Render)
+- Mobil APK build
+- Final testler ve optimizasyon
+- Dokümantasyon tamamlama
 
 ## 🤝 Katkıda Bulunma
 
