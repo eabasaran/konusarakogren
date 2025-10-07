@@ -6,7 +6,7 @@ import re
 
 def analyze_sentiment(text):
     """
-    Simple rule-based sentiment analysis for MVP testing
+    Enhanced rule-based sentiment analysis with better scoring
     Returns: [label, confidence_score]
     """
     if not text or text.strip() == "":
@@ -15,32 +15,94 @@ def analyze_sentiment(text):
     try:
         text_lower = text.lower()
         
-        # Positive keywords (Turkish and English)
-        positive_words = [
-            'harika', 'güzel', 'mükemmel', 'süper', 'başarılı', 'mutlu', 'seviyorum', 
-            'beğendim', 'iyi', 'excellent', 'great', 'good', 'amazing', 'wonderful',
-            'love', 'like', 'fantastic', 'awesome', 'perfect', 'happy', 'pleased'
-        ]
+        # Positive keywords with weights (Turkish and English)
+        positive_words = {
+            # High intensity
+            'harika': 2, 'mükemmel': 2, 'muhteşem': 2, 'excellent': 2, 'amazing': 2, 
+            'wonderful': 2, 'fantastic': 2, 'awesome': 2, 'brilliant': 2, 'outstanding': 2,
+            'seviyorum': 2, 'love': 2, 'adore': 2,
+            
+            # Medium intensity
+            'güzel': 1.5, 'iyi': 1.5, 'başarılı': 1.5, 'süper': 1.5, 'mutlu': 1.5,
+            'good': 1.5, 'great': 1.5, 'nice': 1.5, 'happy': 1.5, 'pleased': 1.5,
+            'beğendim': 1.5, 'like': 1.5, 'enjoy': 1.5, 'perfect': 1.5,
+            
+            # Lower intensity - but still positive
+            'fena değil': 0.8, 'idare eder': 0.8, 'okay': 0.8, 'fine': 0.8, 'alright': 0.8,
+            'teşekkür': 0.8, 'thanks': 0.8, 'hoş': 0.8, 'tatlı': 0.8
+        }
         
-        # Negative keywords (Turkish and English)
-        negative_words = [
-            'kötü', 'berbat', 'korkunç', 'üzücü', 'kızgın', 'sinirli', 'nefret',
-            'beğenmedim', 'bad', 'terrible', 'horrible', 'awful', 'hate', 'angry',
-            'sad', 'disappointed', 'worst', 'disgusting', 'annoying', 'furious'
-        ]
+        # Negative keywords with weights (Turkish and English)
+        negative_words = {
+            # High intensity
+            'berbat': 2, 'korkunç': 2, 'iğrenç': 2, 'rezalet': 2, 'nefret': 2,
+            'terrible': 2, 'horrible': 2, 'awful': 2, 'disgusting': 2, 'hate': 2,
+            'worst': 2, 'pathetic': 2, 'atrocious': 2,
+            
+            # Medium intensity
+            'kötü': 1.5, 'berbat': 1.5, 'üzücü': 1.5, 'sinirli': 1.5, 'kızgın': 1.5,
+            'bad': 1.5, 'sad': 1.5, 'angry': 1.5, 'disappointed': 1.5, 'annoying': 1.5,
+            'beğenmedim': 1.5, 'dislike': 1.5, 'furious': 1.5,
+            
+            # Lower intensity
+            'eh': 1, 'sönük': 1, 'sıkıcı': 1, 'boring': 1, 'meh': 1, 'blah': 1
+        }
         
-        positive_score = sum(1 for word in positive_words if word in text_lower)
-        negative_score = sum(1 for word in negative_words if word in text_lower)
+        # Intensifiers and negations
+        intensifiers = ['çok', 'very', 'really', 'extremely', 'so', 'too', 'quite', 'incredibly']
+        negations = ['değil', 'yok', 'not', 'no', 'never', 'neither', 'nor', 'hiç']
         
-        # Determine sentiment based on keyword counts
+        # Calculate weighted scores
+        positive_score = 0
+        negative_score = 0
+        
+        words = text_lower.split()
+        for i, word in enumerate(words):
+            # Check for intensifiers before the word
+            multiplier = 1.3 if i > 0 and words[i-1] in intensifiers else 1.0
+            
+            # Check for negations before the word (flip sentiment)
+            negated = i > 0 and words[i-1] in negations
+            
+            if word in positive_words:
+                score = positive_words[word] * multiplier
+                if negated:
+                    negative_score += score  # Flip to negative
+                else:
+                    positive_score += score
+                    
+            elif word in negative_words:
+                score = negative_words[word] * multiplier
+                if negated:
+                    positive_score += score  # Flip to positive
+                else:
+                    negative_score += score
+        
+        # Also check for multi-word phrases
+        if 'hiç beğenmedim' in text_lower or 'hiç iyi değil' in text_lower:
+            negative_score += 2
+        if 'çok güzel' in text_lower or 'çok iyi' in text_lower:
+            positive_score += 2
+            
+        # Determine sentiment based on weighted scores
+        total_score = positive_score + negative_score
+        
+        if total_score == 0:
+            # No sentiment keywords found
+            return ["NEUTRAL", 0.55]
+        
+        # Calculate confidence based on score difference
         if positive_score > negative_score:
-            confidence = min(0.7 + (positive_score * 0.1), 0.95)
-            return ["POSITIVE", confidence]
+            diff = positive_score - negative_score
+            confidence = min(0.65 + (diff * 0.08), 0.98)
+            return ["POSITIVE", round(confidence, 2)]
         elif negative_score > positive_score:
-            confidence = min(0.7 + (negative_score * 0.1), 0.95)
-            return ["NEGATIVE", confidence]
+            diff = negative_score - positive_score
+            confidence = min(0.65 + (diff * 0.08), 0.98)
+            return ["NEGATIVE", round(confidence, 2)]
         else:
-            return ["NEUTRAL", 0.6]
+            # Scores are equal - mixed sentiment
+            return ["NEUTRAL", 0.60]
         
     except Exception as e:
         print(f"Error in sentiment analysis: {e}")
@@ -61,11 +123,14 @@ iface = gr.Interface(
     title="🎭 Duygu Analizi Servisi",
     description="Türkçe ve çok dilli metinler için duygu analizi yapan AI servisi. Mesajınızın pozitif, negatif veya nötr olduğunu belirler.",
     examples=[
-        ["Bu harika bir gün!"],
-        ["Çok üzgünüm bu duruma."],
-        ["Bugün hava güzel."],
-        ["I love this product!"],
-        ["This is terrible."]
+        ["Bu harika bir gün! Çok mutluyum!"],
+        ["Bu ürün berbat, hiç beğenmedim."],
+        ["Bugün hava güzel ama biraz soğuk."],
+        ["I love this product! It's amazing!"],
+        ["This is terrible and disappointing."],
+        ["Merhaba, nasılsın?"],
+        ["Çok güzel bir film izledim."],
+        ["Kötü bir deneyimdi, çok üzücü."]
     ],
     api_name="predict"
 )
