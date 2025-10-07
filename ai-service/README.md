@@ -1,5 +1,5 @@
 ---
-title: Konuşarak Öğren - Duygu Analizi
+title: Duygu Analizi Servisi
 emoji: 🎭
 colorFrom: blue
 colorTo: purple
@@ -10,9 +10,9 @@ pinned: false
 license: mit
 ---
 
-# 🎭 Konuşarak Öğren - Duygu Analizi Servisi
+# 🎭 Duygu Analizi Servisi
 
-Bu AI servisi, Türkçe ve çok dilli metinler için gelişmiş duygu analizi yapar.
+Türkçe ve çok dilli metinler için gelişmiş duygu analizi servisi.
 
 ## 🚀 Özellikler
 
@@ -41,23 +41,23 @@ Kural tabanlı (rule-based) duygu analizi sistemi:
 
 ## 📡 API Kullanımı
 
-### Hugging Face Spaces'te Deploy Edilmiş Versiyon
+### Python
 
 ```python
 import requests
 
 response = requests.post(
-    "https://huggingface.co/spaces/KULLANICI_ADI/konusarak-ogren-sentiment/api/predict",
+    "http://localhost:7860/api/predict",
     json={"data": ["Analiz edilecek mesaj"]}
 )
 
-# Beklenen yanıt: {"data": ["POSITIVE", 0.81]}
+# Yanıt: {"data": ["POSITIVE", 0.81]}
 ```
 
-### cURL ile Test
+### cURL
 
 ```bash
-curl -X POST https://huggingface.co/spaces/KULLANICI_ADI/konusarak-ogren-sentiment/api/predict \
+curl -X POST http://localhost:7860/api/predict \
   -H "Content-Type: application/json" \
   -d '{"data": ["Bu harika bir gün!"]}'
 ```
@@ -89,39 +89,12 @@ python test_sentiment.py
 
 10 farklı test senaryosu ile %90 doğruluk oranı.
 
-## 🚀 Hugging Face Spaces'e Deployment
-
-Detaylı talimatlar için: **[DEPLOY_HF.md](DEPLOY_HF.md)**
-
-### Hızlı Başlangıç
-
-1. https://huggingface.co/spaces adresine gidin
-2. "Create new Space" → Gradio seçin
-3. Şu dosyaları yükleyin:
-   - `README.md` (metadata içerir)
-   - `app.py` (ana uygulama)
-   - `requirements.txt` (bağımlılıklar)
-4. Otomatik build başlayacak (2-5 dakika)
-5. Space hazır! 🎉
-
-## 🔧 Backend Entegrasyonu
-
-Space deploy edildikten sonra, backend'inizde AI URL'yi güncelleyin:
-
-**appsettings.Production.json:**
-```json
-{
-  "AI_URL": "https://huggingface.co/spaces/KULLANICI_ADI/konusarak-ogren-sentiment"
-}
-```
-
 ## 📚 Dokümantasyon
 
 - **[SENTIMENT_FIX.md](SENTIMENT_FIX.md)** - Duygu analizi düzeltme detayları
-- **[DEPLOY_HF.md](DEPLOY_HF.md)** - Hugging Face deployment talimatları
 
 ## 📊 Performans
 
 - **Doğruluk**: ~90% (test set üzerinde)
-- **Yanıt Süresi**: <100ms (local), <500ms (HF Spaces CPU)
+- **Yanıt Süresi**: <100ms (local)
 - **Desteklenen Diller**: Türkçe (öncelikli), İngilizce, ve diğer Latin alfabesi dilleri

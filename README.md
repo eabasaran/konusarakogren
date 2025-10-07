@@ -48,12 +48,15 @@ API şu endpoint'lerde çalışacak:
 - `POST /messages` - Yeni mesaj gönder
 - `GET /messages` - Tüm mesajları getir
 
-### 2. AI Servisi (Hugging Face Spaces)
+### 2. AI Servisi (Python + Gradio)
 
-1. [Hugging Face](https://huggingface.co) hesabı oluşturun
-2. Yeni bir Space oluşturun (Gradio + Python)
-3. `ai-service/` klasöründeki dosyaları Space'e yükleyin
-4. Space URL'ini backend `appsettings.json` dosyasında `AI_URL` olarak ayarlayın
+```bash
+cd ai-service
+pip install -r requirements.txt
+python app.py
+```
+
+AI servisi http://127.0.0.1:7860 adresinde çalışacak.
 
 ### 3. Frontend (React)
 
@@ -90,34 +93,18 @@ vercel --prod
 2. `render.yaml` dosyası otomatik deployment yapar
 3. Environment variables ayarla
 
-### Hugging Face Spaces (AI)
-1. `ai-service/` klasörünü yeni Space'e yükle
-2. `README.md` dosyasındaki metadata ile otomatik deploy
-
-## 🤖 AI Araçları Kullanımı
-
-### Elle Yazılan Kodlar:
-- **Backend API endpoint'leri** (`Program.cs` - mesaj CRUD işlemleri)
-- **Entity Framework model konfigürasyonları** (`MessageContext.cs`)
-- **Repository pattern implementasyonu** (`MessageRepository.cs`)
-
-### AI Destekli Yazılan Kodlar:
-- Duygu analizi model entegrasyonu (Hugging Face Transformers)
-- Frontend React bileşenleri (planlanmış)
-- React Native mobil arayüzler (planlanmış)
-
 ## 📊 Duygu Analizi
 
-AI servisi `cardiffnlp/twitter-xlm-roberta-base-sentiment-multilingual` modelini kullanarak:
-- Türkçe ve çok dilli metinleri destekler
+AI servisi gelişmiş kural tabanlı (rule-based) duygu analizi sistemi kullanarak:
+- Türkçe ve İngilizce metinleri destekler
 - Pozitif/Negatif/Nötr sınıflandırması yapar
-- 0.0-1.0 arası güven skoru sağlar
+- Ağırlıklandırılmış kelime skorlama ile 0.55-0.98 arası güven skoru sağlar
+- Intensifier ("çok", "very") ve negation ("değil", "not") desteği
 
 ## 🔗 Demo Linkleri
 
 - **🌐 Web Chat**: `konusarakogren.vercel.app` (Deploy edilecek)
 - **🔧 API Backend**: `konusarakogren-api.onrender.com` (Deploy edilecek)
-- **🤖 AI Duygu Analizi**: `https://huggingface.co/spaces/emineaycabasaran/konusarak-ogren-sentiment` ⚠️ **Manuel deploy gerekli**
 - **📱 Mobile APK**: Android build hazır (emulator gerekli)
 - **📂 GitHub**: https://github.com/eabasaran/konusarakogren
 
