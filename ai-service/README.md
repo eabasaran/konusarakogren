@@ -1,17 +1,29 @@
-# 🎭 Duygu Analizi AI Servisi
+---
+title: Konuşarak Öğren - Duygu Analizi
+emoji: 🎭
+colorFrom: blue
+colorTo: purple
+sdk: gradio
+sdk_version: 4.44.0
+app_file: app.py
+pinned: false
+license: mit
+---
 
-Bu Hugging Face Space, Türkçe ve çok dilli mesajların duygu analizini gerçekleştiren bir AI servisidir.
+# 🎭 Konuşarak Öğren - Duygu Analizi Servisi
+
+Bu AI servisi, Türkçe ve çok dilli metinler için duygu analizi yapar.
 
 ## 🚀 Özellikler
 
-- **Çok Dilli Destek**: Türkçe, İngilizce ve diğer diller
-- **Hızlı Analiz**: Transformers tabanlı model
-- **3 Sınıf**: Pozitif, Negatif, Nötr
-- **Güven Skoru**: 0.0-1.0 arası
+- 🌍 **Çok Dilli Destek**: Türkçe, İngilizce ve diğer diller
+- ⚡ **Hızlı Analiz**: BERT tabanlı model
+- 🎯 **3 Sınıf**: Pozitif, Negatif, Nötr
+- 📊 **Güven Skoru**: 0.0-1.0 arası
 
 ## 🤖 Kullanılan Model
 
-`cardiffnlp/twitter-xlm-roberta-base-sentiment-multilingual`
+`nlptown/bert-base-multilingual-uncased-sentiment`
 
 ## 📡 API Kullanımı
 
@@ -19,7 +31,7 @@ Bu Hugging Face Space, Türkçe ve çok dilli mesajların duygu analizini gerçe
 import requests
 
 response = requests.post(
-    "https://huggingface.co/spaces/YOUR_USERNAME/sentiment-analysis/api/predict",
+    "https://huggingface.co/spaces/eabasaran/konusarakogren-sentiment/api/predict",
     json={"data": ["Analiz edilecek mesaj"]}
 )
 ```

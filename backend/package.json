@@ -1,0 +1,13 @@
+{
+  "name": "konusarakogren-backend",
+  "version": "1.0.0",
+  "description": "Konuşarak Öğren Backend API",
+  "scripts": {
+    "start": "cd MessageApi && dotnet MessageApi.dll",
+    "build": "cd MessageApi && dotnet publish -c Release -o ../out",
+    "dev": "cd MessageApi && dotnet run"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

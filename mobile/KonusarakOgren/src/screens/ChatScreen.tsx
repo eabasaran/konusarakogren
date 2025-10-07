@@ -23,7 +23,9 @@ interface Message {
   sentimentScore?: number;
 }
 
-const API_BASE = 'https://konusarakogren-api.onrender.com'; // Production API URL
+const API_BASE = __DEV__ 
+  ? 'http://localhost:5087' 
+  : 'https://konusarakogren-api.onrender.com';
 
 const ChatScreen = () => {
   const [messages, setMessages] = useState<Message[]>([]);

@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: konusarakogren-api
+    env: dotnet
+    plan: free
+    buildCommand: cd backend/MessageApi && dotnet publish -c Release -o ../../out
+    startCommand: cd out && dotnet MessageApi.dll
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ASPNETCORE_URLS
+        value: http://0.0.0.0:$PORT
+      - key: AI_URL
+        value: https://huggingface.co/spaces/eabasaran/sentiment-analysis

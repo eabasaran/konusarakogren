@@ -60,19 +60,39 @@ API şu endpoint'lerde çalışacak:
 ```bash
 cd frontend
 npm install
-npm start
+npm run dev    # Development
+npm run build  # Production build
 ```
 
 ### 4. Mobile (React Native CLI)
 
 ```bash
-cd mobile
+cd mobile/KonusarakOgren
 npm install
 # iOS için
 npx react-native run-ios
 # Android için
 npx react-native run-android
+# APK build için
+cd android && ./gradlew assembleRelease
 ```
+
+## 🚀 Production Deployment
+
+### Vercel (Frontend)
+```bash
+# Frontend klasöründe
+vercel --prod
+```
+
+### Render (Backend)
+1. GitHub repository'yi Render'a bağla
+2. `render.yaml` dosyası otomatik deployment yapar
+3. Environment variables ayarla
+
+### Hugging Face Spaces (AI)
+1. `ai-service/` klasörünü yeni Space'e yükle
+2. `README.md` dosyasındaki metadata ile otomatik deploy
 
 ## 🤖 AI Araçları Kullanımı
 
@@ -95,10 +115,11 @@ AI servisi `cardiffnlp/twitter-xlm-roberta-base-sentiment-multilingual` modelini
 
 ## 🔗 Demo Linkleri
 
-- **Web Chat**: https://konusarakogren.vercel.app (Vercel deployment)
-- **API Backend**: https://konusarakogren-api.onrender.com (Render deployment)
-- **AI Duygu Analizi**: http://127.0.0.1:7860 (Local Gradio)
-- **GitHub Repository**: https://github.com/eabasaran/konusarakogren
+- **🌐 Web Chat**: `konusarakogren.vercel.app` (Vercel'e deploy edilecek)
+- **🔧 API Backend**: `konusarakogren-api.onrender.com` (Render'a deploy edilecek)
+- **🤖 AI Duygu Analizi**: `huggingface.co/spaces/eabasaran/konusarakogren-sentiment`
+- **📱 Mobile APK**: Android build hazır (emulator gerekli)
+- **📂 GitHub**: https://github.com/eabasaran/konusarakogren
 
 ## 📋 Özellikler (MVP)
 
@@ -128,11 +149,12 @@ AI servisi `cardiffnlp/twitter-xlm-roberta-base-sentiment-multilingual` modelini
 - Mobil chat uygulaması geliştirme (AsyncStorage, API calls)
 - Vercel deployment hazırlığı
 
-### 3. Gün (Planlanmış)
-- Production deployment (Vercel + Render)
-- Mobil APK build
-- Final testler ve optimizasyon
-- Dokümantasyon tamamlama
+### 3. Gün (Tamamlandı ✅)
+- Production build hazırlığı (Frontend + Backend)
+- Render deployment konfigürasyonu
+- Hugging Face Spaces hazırlığı
+- Mobile production URL entegrasyonu
+- Final dokümantasyon
 
 ## 🤝 Katkıda Bulunma
 
