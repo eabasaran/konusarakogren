@@ -105,10 +105,13 @@ AI servisi `cardiffnlp/twitter-xlm-roberta-base-sentiment-multilingual` modelini
 - [x] Mesaj gönderme ve listeleme API'si
 - [x] SQLite veritabanı entegrasyonu
 - [x] Duygu analizi AI servisi
-- [x] React web chat arayüzü
-- [x] React Native mobil uygulama kodu
+- [x] React web chat arayüzü (Vite + TypeScript)
+- [x] React Native mobil uygulama (CLI kurulum + TypeScript)
 - [x] API + AI servisi entegrasyonu
+- [x] AsyncStorage ile kullanıcı adı kaydetme
+- [x] Production-ready mobile app
 - [ ] Production deployment (Vercel + Render)
+- [ ] Android APK build
 - [ ] Gerçek zamanlı güncellemeler (WebSocket)
 
 ## 🏗️ Geliştirme Planı
@@ -119,10 +122,11 @@ AI servisi `cardiffnlp/twitter-xlm-roberta-base-sentiment-multilingual` modelini
 - .NET backend ile mesaj kayıt API'si kurma
 
 ### 2. Gün (Tamamlandı ✅)
-- React web frontend geliştirme
+- React web frontend geliştirme (Vite + TypeScript)
 - Backend + AI API entegrasyonu
-- React Native mobil kod hazırlığı
-- Vercel deployment dosyaları
+- React Native CLI kurulum ve proje oluşturma
+- Mobil chat uygulaması geliştirme (AsyncStorage, API calls)
+- Vercel deployment hazırlığı
 
 ### 3. Gün (Planlanmış)
 - Production deployment (Vercel + Render)
