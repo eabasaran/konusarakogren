@@ -115,9 +115,9 @@ AI servisi `cardiffnlp/twitter-xlm-roberta-base-sentiment-multilingual` modelini
 
 ## 🔗 Demo Linkleri
 
-- **🌐 Web Chat**: `konusarakogren.vercel.app` (Vercel'e deploy edilecek)
-- **🔧 API Backend**: `konusarakogren-api.onrender.com` (Render'a deploy edilecek)
-- **🤖 AI Duygu Analizi**: `huggingface.co/spaces/eabasaran/konusarakogren-sentiment`
+- **🌐 Web Chat**: `konusarakogren.vercel.app` (Deploy edilecek)
+- **🔧 API Backend**: `konusarakogren-api.onrender.com` (Deploy edilecek)
+- **🤖 AI Duygu Analizi**: `https://huggingface.co/spaces/emineaycabasaran/konusarak-ogren-sentiment` ⚠️ **Manuel deploy gerekli**
 - **📱 Mobile APK**: Android build hazır (emulator gerekli)
 - **📂 GitHub**: https://github.com/eabasaran/konusarakogren
 
@@ -125,7 +125,7 @@ AI servisi `cardiffnlp/twitter-xlm-roberta-base-sentiment-multilingual` modelini
 
 - [x] Mesaj gönderme ve listeleme API'si
 - [x] SQLite veritabanı entegrasyonu
-- [x] Duygu analizi AI servisi
+- [x] Duygu analizi AI servisi (Gelişmiş kural tabanlı sistem)
 - [x] React web chat arayüzü (Vite + TypeScript)
 - [x] React Native mobil uygulama (CLI kurulum + TypeScript)
 - [x] API + AI servisi entegrasyonu
