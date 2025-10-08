@@ -1,6 +1,4 @@
-"""
-Test script for sentiment analysis
-"""
+
 import sys
 sys.path.insert(0, '.')
 
